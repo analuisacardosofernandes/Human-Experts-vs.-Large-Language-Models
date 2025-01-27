@@ -1,0 +1,100 @@
+## Semantic Annotation Scheme for Temporal Information in Clinical Narratives (European Portuguese)
+
+This scheme adapts the Text2Story framework to annotate temporal information in clinical narratives concerning Acute Myeloid Leukemia (AML) and Non-Hodgkin Lymphoma (NHL) patients.  It uses INCEpTION for implementation.
+
+**I. Annotation Units:**
+
+* **Events (EVENT):** Situations occurring, happening, or states/circumstances relevant temporally.  These are marked on the main verb (or noun/adjective in predicative constructions, following Text2Story guidelines).
+* **Temporal Expressions (TIME):** Dates, times, durations, and frequencies.
+* **Temporal Relations (T-LINK):** Relationships between events and/or temporal expressions (e.g., precedence, subsequence, simultaneity, inclusion).
+
+
+**II.  Annotation Scheme:**
+
+**A.  EVENT:**
+
+* **Attributes:**
+    * `class`: OCCURRENCE, STATE, REPORTING, PERCEPTION, ASPECTUAL, I-ACTION, I-STATE (definitions as per Text2Story).  *Add specific medical classes*:
+        * `DIAGNOSIS`:  Event related to establishing a diagnosis (e.g., "diagnosticou leucemia").
+        * `TREATMENT`: Event related to administering treatment (e.g., "iniciou quimioterapia").
+        * `PROCEDURE`: Event representing a medical procedure (e.g., "realizou biópsia").
+        * `RESULT`: Event representing the outcome of a test or procedure (e.g., "mostrou anemia").
+        * `SYMPTOM`: Event related to the manifestation of a symptom (e.g., "apresentou febre").
+    * `type`: STATE, PROCESS, TRANSITION (definitions as per Text2Story)
+    * `pos`: VERB, NOUN, ADJECTIVE (part-of-speech)
+    * `tense`: PRESENT, PAST, FUTURE, IMPERFECT (grammatical tense)
+    * `aspect`: PROGRESSIVE, PERFECTIVE, IMPERFECTIVE, PERFECTIVE-PROGRESSIVE, IMPERFECTIVE-PROGRESSIVE, NONE (grammatical aspect)
+    * `vform`: NONE, GERUNDIVE, INFINITIVE, PARTICIPLE (verb form)
+    * `mood`: NONE, SUBJUNCTIVE, CONDITIONAL, FUTURE, IMPERATIVE (verb mood)
+    * `modality`: DEONTIC, EPISTEMIC, NONE (modal verbs)
+    * `polarity`: NEG, POS (negative/positive)
+    * `movement`: MOTION_LITERAL, MOTION_FICTIVE, MOTION_INTRINSIC-CHANGE, NON_MOTION (as per Text2Story, adapted for medical context; e.g., movement of fluids, cells)
+    * `medical_event`:  A free text field for adding relevant medical information not captured by other attributes, such as the specific type of chemotherapy administered or a detailed description of a symptom.
+
+
+**B. TIME:**
+
+* **Attributes:**
+    * `type`: DATE, TIME, DURATION, SET (definitions as per Text2Story)
+    * `value`:  Specific value (e.g., "2023-10-26", "P1M", "2X/week")  Use ISO 8601 for dates and durations.
+    * `freq`: Frequency (e.g., 2, daily)
+    * `quant`: Quantifier (e.g., EVERY, EACH)
+    * `functionInDocument`: PUBLICATION_TIME, ANCHOR_TIME (as per Text2Story)
+    * `anchorTime`:  ID of the TIME expression used as a reference point.
+
+
+**C. T-LINK:**
+
+* **Attributes:**
+    * `relType`: BEFORE, AFTER, INCLUDES, IS_INCLUDED, DURING, SIMULTANEOUS, IDENTITY, BEGINS, ENDS, BEGUN_BY, ENDED_BY (definitions as per Text2Story. Consider adding specific medical relations if needed)
+    * `event1`: ID of the first event/TIME.
+    * `event2`: ID of the second event/TIME.
+
+
+
+**III. Annotation Guidelines:**
+
+1. **Event Identification:**  Annotate all events explicitly mentioned and those implicitly inferred from the context, focusing on those with temporal relevance.  Use the medical event classes where appropriate.  Address ambiguities in verb interpretations (e.g., aspectual verbs) according to Text2Story guidelines.
+
+2. **Temporal Expression Identification:** Annotate all explicit temporal expressions.  Resolve ambiguities by considering the overall context.  Use standardized formats for dates, times, and durations.
+
+3. **Temporal Relation Annotation:** Establish relations between events and temporal expressions.  For complex temporal scenarios, break them down into simpler relationships. Use the `anchorTime` attribute to link related time expressions.
+
+4. **Handling Ambiguities and Gaps:**
+    * **Ambiguous Temporal Expressions:**  Resolve ambiguities by analyzing the surrounding text for contextual clues. If the ambiguity is unresolvable, annotate with a note explaining the uncertainty.
+    * **Implicit Temporal Information:**  Annotate only if clear inferential evidence exists.
+    * **Missing Information:** Indicate missing information with appropriate notes.
+
+5. **Inter-Annotator Agreement:**  Establish clear guidelines for resolving discrepancies between annotators.  Utilize INCEpTION's collaborative features.
+
+
+**IV. Example Annotation (using INCEpTION notation):**
+
+(Example based on a portion of Report 1.2)
+
+```xml
+<EVENT id="e1" class="TREATMENT" type="PROCESS" tense="PAST" aspect="PERFECTIVE">
+  <span>Iniciou</span>
+</EVENT>
+<EVENT id="e2" class="TREATMENT" type="PROCESS" tense="PAST" aspect="PERFECTIVE">
+  <span>hiperhidratação</span>
+</EVENT>
+<TIME id="t1" type="DATE" value="2018-05-02">
+  <span>02/05/2018</span>
+</TIME>
+<T-LINK relType="SIMULTANEOUS" event1="e1" event2="e2"/>
+<T-LINK relType="AFTER" event1="t1" event2="e1"/>
+
+
+<EVENT id="e3" class="SYMPTOM" type="STATE" tense="PAST" aspect="PERFECTIVE">
+ <span>Teve</span>
+</EVENT>
+<EVENT id="e4" class="SYMPTOM" type="STATE" tense="PAST" aspect="PERFECTIVE">
+ <span>síndrome febril</span>
+</EVENT>
+<T-LINK relType="AFTER" event1="t1" event2="e3"/>
+<T-LINK relType="IDENTITY" event1="e3" event2="e4"/>
+
+```
+
+This scheme provides a robust framework for annotating temporal information.  Remember to adapt and expand it as needed based on the specific features of your corpus.  The use of INCEpTION's annotation features, including notes and collaborative tools, is crucial for maintaining consistency and resolving disagreements.

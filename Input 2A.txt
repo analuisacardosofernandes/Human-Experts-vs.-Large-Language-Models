@@ -1,0 +1,7 @@
+Create a semantic annotation scheme and corresponding annotation guidelines to capture temporal information in clinical narratives in European Portuguese. The corpus will consist of clinical narratives from patients diagnosed with Acute Myeloid Leukemia or non-Hodgkin lymphoma. It will include group consultation reports, discharge summaries, and generic reports detailing the patient's medical history. Interdocument annotation will be performed.
+The scheme should include labels to annotate:
+* Events (situations that happen or occur, or states or circumstances that are temporally relevant),
+* Temporal expressions (dates, times, durations, and frequencies),
+* Temporal relations (e.g., precedence, subsequence, and simultaneity).
+The scheme must capture morphosyntactic and grammatical information and domain-specific medical information. The guidelines should specify how to handle ambiguities and gaps. The INCEpTION tool will be used to implement the scheme. Existing frameworks such as i2b2, TimeML, and Text2Story can be consulted as references. For capturing morphosyntactic and grammatical information, refer to the Text2Story guidelines provided in the attached document. 
+

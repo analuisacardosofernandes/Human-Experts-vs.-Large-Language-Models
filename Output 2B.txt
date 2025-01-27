@@ -1,0 +1,90 @@
+ "## Semantic Annotation Scheme for Temporal Information in Clinical Narratives (European Portuguese)
+
+This scheme builds upon TimeML and Text2Story, adapting it for clinical narratives in European Portuguese and focusing on Acute Myeloid Leukaemia (AML) and non-Hodgkin lymphoma (NHL).  It uses INCEpTION for implementation.
+
+**I. Entity Types:**
+
+* **EVENT (EV):**  Situations, happenings, states, or circumstances relevant to the patient's medical journey.
+    * **Attributes:**
+        * `class`: OCCURRENCE, STATE, REPORTING, PERCEPTION, I-ACTION (Intensional Action), I-STATE (Intensional State), DIAGNOSIS, TREATMENT, PROCEDURE, SYMPTOM_ONSET, SYMPTOM_RESOLUTION, PROGNOSIS, FOLLOWUP,  LAB_RESULT,  MEDICATION_ADMINISTRATION
+        * `type`: STATE, PROCESS, TRANSITION (Accomplishment/Achievement)
+        * `pos`: VERB, NOUN, ADJECTIVE, ADVERB
+        * `tense`: PRESENT, PAST, FUTURE, IMPERFECT
+        * `aspect`: PROGRESSIVE, PERFECTIVE, IMPERFECTIVE, PERFECTIVE-PROGRESSIVE, IMPERFECTIVE-PROGRESSIVE, NONE
+        * `vform`: NONE, GERUNDIVE, INFINITIVE, PARTICIPLE
+        * `mood`: INDICATIVE, SUBJUNCTIVE, CONDITIONAL, FUTURE, IMPERATIVE
+        * `modality`: DEONTIC, EPISTEMIC, NONE
+        * `polarity`: NEG, POS
+        * `medical_domain`:  (e.g., hematological, oncological, infectious, etc.) – to specify the medical area the event relates to.
+        * `event_id`: Unique identifier for each event.
+
+* **TIME (TI):** Temporal expressions denoting dates, times, durations, or frequencies.
+    * **Attributes:**
+        * `type`: DATE, TIME, DURATION, SET, FREQUENCY
+        * `value`:  Precise value (e.g., "2024-10-27", "14:30", "PT3H", "2x/week")
+        * `granularity`: year, month, day, hour, minute, second
+        * `freq`: Frequency (e.g., "daily", "weekly", "2x/month")  (for `type=SET`)
+        * `quant`: Quantifier (e.g., "every", "each") (for `type=SET`)
+        * `function_in_document`:  ANCHOR_TIME, PUBLICATION_TIME, RELATIVE_TIME
+
+**II. Relation Types:**
+
+* **TEMPORAL RELATION (TLINK):**  Links between two EVENTS or between an EVENT and a TIME.
+    * **Attributes:**
+        * `type`: BEFORE, AFTER, INCLUDES, IS_INCLUDED, DURING, SIMULTANEOUS, IDENTITY, BEGINS, ENDS, BEGUN_BY, ENDED_BY, OVERLAP (partial overlap)
+        * `rel_type`: temporal-before, temporal-after, etc (for INCEpTION compatibility)
+
+
+**III. Annotation Guidelines:**
+
+1. **Event Annotation:**
+    * Annotate main verbs and nouns denoting temporally relevant events. Include the whole (semi-)lexicalized expression if applicable (e.g., "recebeu alta").
+    *  For predicative constructions (e.g., "O paciente estava cansado"), annotate the adjective/noun and assign tense and aspect based on the verb.
+    *  For aspectual verbs (e.g., "começar a tossir"), annotate both verbs and link them with an aspectual link (if the framework supports it; otherwise, annotate the main verb).
+    *  For nominalizations representing events (e.g., "a remissão da leucemia"), annotate them as events.
+    * Use the `medical_domain` attribute to classify events by their relevance within the medical record.
+    * Assign unique `event_id` to each event.
+
+2. **Time Annotation:**
+    * Annotate explicit and implicit temporal expressions.
+    * For ambiguous expressions, add a note clarifying the interpretation.
+    * Use the `value` attribute to provide the precise temporal information.
+    *  Define relative temporal expressions (e.g., "depois de", "antes de") using TLINKs.
+
+3. **Temporal Relation Annotation:**
+    * Annotate relations between events and times using TLINKs.
+    *  For complex temporal relations, break them down into simpler relations.
+    *  Resolve ambiguities through careful consideration of the context and using notes if necessary.
+
+
+4. **Ambiguity and Gaps:**
+    * Document ambiguities and uncertainties in the annotation notes.
+    * If temporal information is missing, annotate it as "unknown" or use a placeholder.
+    *  Establish inter-annotator agreement procedures and guidelines for resolving disagreements.
+
+5. **INCEpTION Implementation:**
+
+* Define the schema in INCEpTION, including all attributes and relation types.
+* Create annotation guidelines for your annotators.
+* Utilize INCEpTION's features for inter-annotator agreement and annotation quality control.
+
+
+**Example Annotation:**
+
+"O paciente, diagnosticado com leucemia mieloide aguda em 27 de outubro de 2023, iniciou quimioterapia em 3 de novembro de 2023.  Durante o tratamento, apresentou náuseas."
+
+
+* `<EV class="DIAGNOSIS" type="STATE" tense="PAST" pos="VERB" event_id="EV1">diagnosticado</EV> com <EV class="DIAGNOSIS" type="STATE" tense="PAST" pos="NOUN" event_id="EV2">leucemia mieloide aguda</EV>`
+* `<TI type="DATE" value="2023-10-27" granularity="day">27 de outubro de 2023</TI>`
+* `<TLINK type="BEFORE" event1="EV2" event2="EV3">BEFORE</TLINK>`
+* `<EV class="TREATMENT" type="OCCURRENCE" tense="PAST" pos="VERB" event_id="EV3">iniciou</EV> <EV class="TREATMENT" type="OCCURRENCE" tense="PAST" pos="NOUN" event_id="EV4">quimioterapia</EV>`
+* `<TI type="DATE" value="2023-11-03" granularity="day">3 de novembro de 2023</TI>`
+* `<TLINK type="AFTER" event1="EV2" event2="EV3">AFTER</TLINK>`
+* `<TLINK type="INCLUDES" time="TI2" event1="EV3">INCLUDES</TLINK>`
+* `<TLINK type="DURING" time="TI2" event1="EV5">DURING</TLINK>`
+* `<EV class="SYMPTOM_ONSET" type="STATE" tense="PAST" pos="VERB" event_id="EV5">apresentou</EV> <EV class="SYMPTOM_ONSET" type="STATE" tense="PAST" pos="NOUN" event_id="EV6">náuseas</EV>`
+* `<TLINK type="AFTER" event1="EV3" event2="EV5">AFTER</TLINK>`
+
+
+
+This scheme provides a solid foundation.  Further refinement may be needed based on the corpus characteristics and annotation process.  Remember to thoroughly document all decisions made during the annotation process.

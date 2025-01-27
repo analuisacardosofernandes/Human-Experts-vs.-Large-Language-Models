@@ -1,0 +1,70 @@
+## Semantic Annotation Scheme for Temporal Information in Clinical Narratives (European Portuguese)
+
+This scheme adapts the Text2Story framework to annotate temporal information in clinical narratives concerning Acute Myeloid Leukemia (AML) and Non-Hodgkin Lymphoma (NHL).  It utilizes InCEpTION for implementation.
+
+**I. Entity Structures:**
+
+**A. Events (EV):** Situations, states, or circumstances temporally relevant.
+
+* **Tag Span:**  The main verb(s) or nominalizations representing the event.  Include copular verbs only if the predicate is a temporal or spatial expression.  Treat (semi-)lexicalized expressions as a single unit. For verb phrases like "ir + infinitive", annotate separately if not adjacent, otherwise annotate only the main verb.
+* **Attributes:**
+    * `class`:  `OCCURRENCE`, `STATE`, `REPORTING`, `PERCEPTION`, `ASPECTUAL`, `I-ACTION` (Intensional action), `I-STATE` (Intensional state).  (Definitions as per Text2Story)
+    * `type`: `STATE`, `PROCESS`, `TRANSITION`. (Definitions as per Text2Story)
+    * `pos`: `VERB`, `NOUN`, `ADJECTIVE`, `OTHER` (for rare cases).
+    * `tense`: `PRESENT`, `PAST`, `FUTURE`, `IMPERFECT` (consider the imperfect as ongoing in the past).
+    * `aspect`: `PROGRESSIVE`, `PERFECTIVE`, `IMPERFECTIVE`, `PERFECTIVE-PROGRESSIVE`, `IMPERFECTIVE-PROGRESSIVE`, `NONE`. (Definitions as per Text2Story)
+    * `vform`: `NONE`, `GERUNDIVE`, `INFINITIVE`, `PARTICIPLE`. (Only for verbs)
+    * `mood`: `NONE`, `SUBJUNCTIVE`, `CONDITIONAL`, `FUTURE`, `IMPERATIVE`. (Only for verbs)
+    * `modality`: `DEVER` (must), `PODER` (can), `TER_DE` (have to), `SER_CAPAZ_DE` (be able to), `NONE`. (Only for verbs)
+    * `polarity`: `NEG`, `POS`.
+    * `domain`:  Add a new attribute `domain` to specify if the event is related to diagnosis, treatment, prognosis, etc. (e.g., `diagnosis`, `treatment_chemotherapy`, `prognosis`, `symptom`, `lab_results`).
+
+
+**B. Temporal Expressions (TE):** Dates, times, durations, and frequencies.
+
+* **Tag Span:** Noun phrases, adverbial phrases, or numerical expressions denoting time.  Exclude prepositions, conjunctions, and ordering expressions.
+* **Attributes:**
+    * `type`: `DATE`, `TIME`, `DURATION`, `SET`.
+    * `value`:  Precise value (e.g., "2024-10-26", "14:30", "P2M" for two months, "2X/week").  Use  ISO 8601 format where possible for dates and durations.
+    * `freq`: (for `SET` type) Frequency (e.g., "2", "daily").
+    * `quant`: (for `SET` type) Quantifier (e.g., "EVERY", "EACH").
+    * `functionInDocument`: `PUBLICATION_TIME`, `ANCHOR_TIME` (as per Text2Story, add others as needed).
+
+
+**II. Link Structures:**
+
+**A. Temporal Relations (TR):** Relationships between two events or between an event and a time expression.
+
+* **Tag Span:** Not applicable, this is a relation between entities.
+* **Attributes:**
+    * `relation`: `BEFORE`, `AFTER`, `INCLUDES`, `IS_INCLUDED`, `DURING`, `SIMULTANEOUS`, `IDENTITY`, `BEGINS`, `ENDS`, `BEGUN_BY`, `ENDED_BY`. (Definitions adapted from Text2Story. `IDENTITY` to capture causal relations and light verb constructions).
+    * `certainty`: Add an attribute `certainty` for cases where temporal relations are uncertain or implicit: `certain`, `uncertain`, `implicit`.
+
+
+**III. Annotation Guidelines:**
+
+1. **Ambiguity:** If a temporal relation is ambiguous, annotate all possible interpretations and add a note explaining the uncertainty. Use the `certainty` attribute in the `TR` annotation.
+2. **Gaps:** If a temporal relation is missing but inferred, annotate it with a note explaining the inference and use `certainty=implicit`.
+3. **Overlapping Events:** If events overlap, annotate each independently and use `TR` to show the simultaneity.
+4. **Nested Events:** If events are nested (one happening during another), use `INCLUDES` and `IS_INCLUDED` relations in `TR`.
+5. **Complex Sentences:** Break down complex sentences into simpler ones for easier annotation.
+6. **Nominalizations:**  Annotate nominalizations representing events according to the guidelines provided above.  Consider the context to determine the event class and type.
+7. **Medical Terminology:** Use the `domain` attribute in `EV` to consistently represent domain-specific events.
+8. **Inter-Annotator Agreement:**  Establish clear guidelines for resolving disagreements during inter-annotator agreement analysis.
+9. **InCEpTION:** Leverage InCEpTION's features for efficient annotation, including relation annotation and note-taking functionalities.
+
+
+**IV. Example:**
+
+"O paciente foi diagnosticado com Leucemia Mielóide Aguda a 15 de outubro de 2023.  Ele iniciou a quimioterapia três dias depois."
+
+* **EV1:**  `<EV class="OCCURRENCE" type="TRANSITION" tense="PAST" aspect="PERFECTIVE" pos="VERB" vform="NONE" domain="diagnosis">diagnosticado</EV>`
+* **TE1:** `<TE type="DATE" value="2023-10-15">15 de outubro de 2023</TE>`
+* **TR1:** `<TR relation="SIMULTANEOUS" certainty="certain" from="EV1" to="TE1"/>`
+* **EV2:** `<EV class="OCCURRENCE" type="TRANSITION" tense="PAST" aspect="PERFECTIVE" pos="VERB" vform="NONE" domain="treatment_chemotherapy">iniciou</EV>`
+* **TE2:** `<TE type="DURATION" value="P3D">três dias depois</TE>`
+* **TR2:** `<TR relation="AFTER" certainty="certain" from="EV1" to="EV2"/>`
+* **TR3:** `<TR relation="BEFORE" certainty="certain" from="TE2" to="EV2"/>`
+
+
+This scheme provides a robust framework for annotating temporal information in clinical narratives.  Remember to regularly update and refine the guidelines based on the encountered challenges during the annotation process.  The use of InCEpTION and the adaptation of Text2Story will facilitate the inter-annotator agreement process and the creation of a high-quality annotated corpus.

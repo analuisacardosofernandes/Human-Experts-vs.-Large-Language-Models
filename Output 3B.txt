@@ -1,0 +1,68 @@
+## Semantic Annotation Scheme for Temporal Information in Portuguese Clinical Narratives
+
+This scheme adapts the Text2Story framework for clinical narratives in European Portuguese, focusing on temporal information relevant to Acute Myeloid Leukemia (AML) and Non-Hodgkin Lymphoma (NHL) patients.  We leverage INCEpTION for annotation.
+
+**I. Entity Structures:**
+
+**A. Events (EVENT):**  Situations, occurrences, states, or circumstances temporally relevant within the clinical narrative.
+
+* **Tag Span:** The main verb (or verb phrase acting as a single predicate) and any directly associated nominalizations representing the event.  Adjectives and nouns describing states are also marked if they are temporally relevant and linked to a temporal expression. For instance, a statement like "O doente estava febril" (“The patient was feverish”), “febril” will be marked as EVENT, linked to the temporal expression indicating when the fever occurred.
+
+* **Attributes:**
+    * `class`: OCCURRENCE, STATE, REPORTING, PERCEPTION, I-ACTION (Intentional Action), I-STATE (Intentional State).  Definitions as in Text2Story.  *Example:  `class = STATE` for "O doente apresentava anemia" ("The patient presented anemia").*
+    * `type`: STATE, PROCESS, TRANSITION. Definitions as in Text2Story. *Example: `type = PROCESS` for "recebeu quimioterapia" ("received chemotherapy").*
+    * `pos`: VERB, NOUN, ADJECTIVE (Following Text2Story).
+    * `tense`: PRESENT, PAST, FUTURE, IMPERFECT.
+    * `aspect`: PROGRESSIVE, PERFECTIVE, IMPERFECTIVE, PERFECTIVE-PROGRESSIVE, IMPERFECTIVE-PROGRESSIVE, NONE.
+    * `vform`: NONE, GERUNDIVE, INFINITIVE, PARTICIPLE (Only for verbs).
+    * `mood`: NONE, SUBJUNCTIVE, CONDITIONAL, FUTURE, IMPERATIVE (Only for verbs).
+    * `modality`: DEVER (must), PODER (can/may), TER DE (have to), SER CAPAZ DE (be able to), NONE (Only for verbs).
+    * `polarity`: NEG, POS.
+    * `medical_domain`:  This new attribute adds specificity.  Values include: DIAGNOSIS, TREATMENT, SYMPTOM, PROCEDURE, LABORATORY_RESULT, etc. *Example: `medical_domain = DIAGNOSIS` for "foi diagnosticado com LMA" ("was diagnosed with AML").*
+
+
+**B. Temporal Expressions (TIME):**  Dates, times, durations, and frequencies.
+
+* **Tag Span:**  The complete temporal expression.  Prepositions introducing temporal expressions are *not* included in the tag.
+
+* **Attributes:**
+    * `type`: DATE, TIME, DURATION, SET.
+    * `value`:  Specifies the exact value (e.g., "2018-05-02," "P2M" for "dois meses"). Use ISO 8601 format for dates and durations.
+    * `freq`: Frequency (e.g., "2X" for "duas vezes").
+    * `quant`: Quantifier (e.g., "EVERY").
+    * `function_in_document`: PUBLICATION_TIME, etc. (as in Text2Story).  This attribute clarifies the role of a temporal expression within the document’s timeline, such as anchoring points.
+
+**II. Link Structures:**
+
+**A. Temporal Relations (TEMPLINK):**  Relationships between events and/or times.
+
+* **Tag Span:**  No separate span; the link connects existing EVENT and/or TIME spans.
+
+* **Attributes:**
+    * `type`: BEFORE, AFTER, INCLUDES, IS_INCLUDED, DURING, SIMULTANEOUS, IDENTITY, BEGINS, ENDS, BEGUN_BY, ENDED_BY (as in Text2Story).  *Example:  `type = AFTER` to connect “diagnosis of AML” and the start of chemotherapy.*
+    * `evidence`: To record any evidence used in resolving ambiguities, such as explicit temporal cues or implicit inferences based on medical knowledge.  For example, if the order of events is only implied, this field should be annotated accordingly.
+
+
+**III. Annotation Guidelines:**
+
+1. **Markables:** Only the elements defined in the Tag Span sections above are markables.
+
+2. **Ambiguities and Gaps:** When temporal relations are ambiguous, annotate the most likely interpretation and document the ambiguity in the "evidence" attribute of the TEMPLINK.  If there are gaps in temporal information, mark this with a note in the INCEpTION tool.
+
+3. **Inter-Annotator Agreement:**  Strict adherence to these guidelines and regular inter-annotator discussions will improve agreement.
+
+4. **Examples from the provided corpus:**
+
+| Example Sentence (PT)                                  | EVENT Tag(s) (with attributes)                      | TIME Tag(s) (with attributes)                    | TEMPLINK (with attributes)            |
+|---------------------------------------------------------|-----------------------------------------------------|-------------------------------------------------|---------------------------------------|
+| "Doente de 74 anos... quadro recente... gengivorragias." | `EVENT: apresentou (class=OCCURRENCE, type=STATE, tense=PAST, medical_domain=SYMPTOM)`  |  `TIME: recentemente (type=DURATION)`           | `TEMPLINK: apresentou-BEFORE-recentemente`      |
+| "fez um hemograma que mostrou..."                      | `EVENT: fez (class=OCCURRENCE, type=PROCESS, tense=PAST, medical_domain=PROCEDURE)` | `TIME: NONE` | `NONE` |
+| "Iniciou tratamento com azacitidina a 21-05-2018"     | `EVENT: Iniciou (class=I-ACTION, type=TRANSITION, tense=PAST, medical_domain=TREATMENT)` | `TIME: 21-05-2018 (type=DATE, value=2018-05-21)` | `TEMPLINK: Iniciou-AFTER-21-05-2018`      |
+| "Teve como intercorrncia um sindrome febril..."       | `EVENT: teve (class=OCCURRENCE, type=STATE, tense=PAST, medical_domain=SYMPTOM)` | `TIME: NONE`                            | `NONE`  |
+| "Rx tórax com hipotransparência na base pulmonar esquerda."| `EVENT: apresentou (implicit, class=STATE, type=STATE, tense=PAST, medical_domain=LABORATORY_RESULT)` | `TIME: NONE`                            | `NONE`    |
+| "Iniciou Tazobac e Vancomicina 1 gr ev a 10/08/2018"  | `EVENT: Iniciou (class=I-ACTION, type=TRANSITION, tense=PAST, medical_domain=TREATMENT)` | `TIME: 10-08-2018 (type=DATE, value=2018-08-10)` | `TEMPLINK: Iniciou-AFTER-10-08-2018` |
+| "Tem alta hoje"                                       | `EVENT: tem alta (class=OCCURRENCE, type=TRANSITION, tense=PRESENT, medical_domain=PROCEDURE)`| `TIME: hoje (type=DATE)`                     | `TEMPLINK: tem alta-IS_INCLUDED-hoje`       |
+| "desde 17/10 altura em que iniciou tratamento..."   | `EVENT: iniciou (class=I-ACTION, type=TRANSITION, tense=PAST, medical_domain=TREATMENT)`   | `TIME: 17/10 (type=DATE, value=2018-10-17)`      | `TEMPLINK: iniciou-AFTER-17/10`         |
+
+
+This expanded scheme provides a robust framework for annotating temporal information in Portuguese clinical narratives.  Remember to use INCEpTION’s annotation features effectively, including notes for complex cases and justification of decisions.  Regular inter-annotator calibration sessions are crucial for consistent and reliable annotation.
