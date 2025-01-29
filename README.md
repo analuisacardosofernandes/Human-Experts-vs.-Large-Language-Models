@@ -1,4 +1,4 @@
-# Medical-Annotation-Schema-Human-vs-LLM
+# Annotation schemes for clinical narratives: human expert vs LLM
 
 This repository contains supplementary files and resources used in conjunction with our medical annotation paper. It is intended to provide readers, researchers, and collaborators with the tools and data needed to replicate and expand upon the findings presented in the paper.
 
