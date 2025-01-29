@@ -2,7 +2,7 @@
 
 This repository contains supplementary materials for the scientific article **"Annotation schemes for clinical narratives: human expert vs. LLM"**. These documents provide detailed insights and data supporting the research and are structured as follows:
 
-- **Inputs and Outputs of Prompts**: The inputs used in the annotation process and their corresponding outputs generated during the experiments.
+- **Inputs and Outputs of Prompts**: The inputs and their corresponding outputs generated during the experiments.
 - **Synthetic Reports for Annotation**: A set of synthetic reports that were used as reference materials for the annotation process.
 - **Synthetic Report as Appendix in Prompts 3**: A specific synthetic report that is included as an appendix in the third prompt of the study.
 - **Text2Story Annotation Scheme**: The annotation scheme for temporal annotation (Text2Story), used as an appendix to prompts 2 and 3, outlining the methodology and process for annotation.
