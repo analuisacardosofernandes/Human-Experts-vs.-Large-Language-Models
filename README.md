@@ -13,16 +13,4 @@ This repository contains supplementary materials for the scientific article **"A
 These documents are intended to support the findings presented in the article and provide transparency regarding the methodologies and evaluations used in the study.
 
 
-## License
-
-This repository is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the resources as permitted under this license.
-
----
-
-## Contact
-
-For questions or support, please contact:
-- **Lead Author**: [Your Name](mailto:your.email@example.com)
-- GitHub Issues: Open an issue [here](https://github.com/yourusername/medical-annotation-support-files/issues)
-
 Thank you for your interest in our work!
