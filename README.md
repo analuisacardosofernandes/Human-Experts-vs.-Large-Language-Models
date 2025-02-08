@@ -1,6 +1,6 @@
-# Supplementary Materials for the Article "Annotation schemes for clinical narratives: human expert vs. LLM"
+# Supplementary Materials for the Article "Human Experts vs. Large Language Models: Evaluating Annotation Scheme and Guidelines Development for Clinical Narratives"
 
-This repository contains supplementary materials for the scientific article **"Annotation schemes for clinical narratives: human expert vs. LLM"**. These documents provide detailed insights and data supporting the research and are structured as follows:
+This repository contains supplementary materials for the scientific article **"Human Experts vs. Large Language Models: Evaluating Annotation Scheme and Guidelines Development for Clinical Narratives "**. These documents provide detailed insights and data supporting the research and are structured as follows:
 
 - **Inputs and Outputs of Prompts**: The inputs and their corresponding outputs generated during the experiments.
 - **Synthetic Reports for Annotation**: A set of synthetic reports that were used as reference materials for the annotation process.
